@@ -1,0 +1,431 @@
+/* ============================================
+   COMPLETE STEP NAVIGATION UI STYLING
+   For Curved Question Navigator with Scroll
+   ============================================ */
+
+/* ============================================
+   1. CONTAINER & POSITIONING
+   ============================================ */
+
+.step-nav-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 7rem; /* 112px / 28 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* ============================================
+   2. VERTICAL LINE (SVG Path)
+   ============================================ */
+
+.step-nav-line-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.step-nav-line-path {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 1;
+}
+
+/* Animated drawing of the line using Motion/Framer Motion */
+/* 
+  initial={{ pathLength: 0 }}
+  animate={{ pathLength: 1 }}
+  transition={{ duration: 1.2, ease: "easeInOut" }}
+*/
+
+/* ============================================
+   3. HOME BUTTON (Top)
+   ============================================ */
+
+.step-nav-home-container {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.step-nav-home-button {
+  width: 2.75rem;  /* 44px / 11 */
+  height: 2.75rem;
+  border-radius: 9999px; /* Full circle */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-nav-home-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(57, 255, 20, 0.5); /* #39FF14 with 50% opacity */
+}
+
+.step-nav-home-icon {
+  width: 1rem;
+  height: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s;
+}
+
+.step-nav-home-button:hover .step-nav-home-icon {
+  color: #39FF14;
+}
+
+/* ============================================
+   4. STEP NUMBERS CONTAINER
+   ============================================ */
+
+.step-numbers-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.step-numbers-inner {
+  width: 100%;
+  height: 600px;
+  position: relative;
+  top: 0;
+}
+
+/* ============================================
+   5. INDIVIDUAL STEP BUTTON BASE
+   ============================================ */
+
+.step-button {
+  position: absolute;
+  pointer-events: auto;
+  transition: all 0.3s;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Entry Animation using Motion/Framer Motion:
+  initial={{ scale: 0, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  transition={{ 
+    delay: index * 0.08,
+    type: "spring", 
+    stiffness: 200, 
+    damping: 15 
+  }}
+*/
+
+/* ============================================
+   6. STEP BUTTON SIZES
+   ============================================ */
+
+.step-button-active {
+  width: 64px;
+  height: 64px;
+}
+
+.step-button-inactive {
+  width: 52px;
+  height: 52px;
+}
+
+.step-button-inactive:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* ============================================
+   7. STEP CIRCLE (Inner Content)
+   ============================================ */
+
+.step-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px; /* Full circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  transition: all 0.3s;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  position: relative;
+}
+
+/* ============================================
+   8. ACTIVE STATE (Current Step)
+   ============================================ */
+
+.step-circle-active {
+  background: linear-gradient(to bottom right, #39FF14, #2ecc11);
+  color: #000000;
+  box-shadow: 0 0 0 4px rgba(57, 255, 20, 0.3); /* Ring effect */
+  box-shadow: 0 20px 25px -5px rgba(57, 255, 20, 0.5); /* Glow */
+}
+
+/* Pulsing Glow Animation */
+.step-pulse-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(57, 255, 20, 0.2);
+}
+
+/* 
+  Motion Animation:
+  animate={{
+    scale: [1, 1.3, 1],
+    opacity: [0.5, 0, 0.5],
+  }}
+  transition={{
+    duration: 2,
+    repeat: Infinity,
+    ease: "easeInOut",
+  }}
+*/
+
+/* ============================================
+   9. PAST STATE (Completed Steps)
+   ============================================ */
+
+.step-circle-past {
+  background: rgba(255, 255, 255, 0.1);
+  color: #39FF14;
+  border: 2px solid rgba(57, 255, 20, 0.4);
+}
+
+.step-circle-past:hover {
+  border-color: #39FF14;
+  box-shadow: 0 10px 15px -3px rgba(57, 255, 20, 0.2);
+}
+
+/* ============================================
+   10. FUTURE STATE (Upcoming Steps)
+   ============================================ */
+
+.step-circle-future {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.step-circle-future:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   11. STEP NUMBER TEXT
+   ============================================ */
+
+.step-number-text {
+  position: relative;
+  z-index: 10;
+}
+
+.step-number-active {
+  font-size: 1.5rem; /* 24px / text-2xl */
+  line-height: 2rem;
+}
+
+.step-number-inactive {
+  font-size: 1rem; /* 16px / text-base */
+  line-height: 1.5rem;
+}
+
+/* ============================================
+   12. VERTICAL SPACING CALCULATION
+   ============================================ */
+
+/* JavaScript calculation for positioning:
+   
+   const yPercent = 5 + (index / (totalVisible - 1)) * 90;
+   
+   This spreads steps from 5% to 95% of vertical space
+   - First step: 5% from top
+   - Last step: 95% from top
+   - Others: Evenly distributed between
+   
+   Applied via inline style:
+   style={{ top: `${yPercent}%` }}
+*/
+
+/* ============================================
+   13. SCROLL BEHAVIOR & SMOOTH TRANSITIONS
+   ============================================ */
+
+/* Main content area should have smooth scroll */
+.step-content-container {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  height: 100vh;
+  padding-left: 7rem; /* Match nav width */
+}
+
+/* Snap scrolling (optional) */
+.step-content-snap {
+  scroll-snap-type: y mandatory;
+}
+
+.step-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar styling */
+.step-content-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.step-content-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.step-content-container::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.3);
+  border-radius: 4px;
+}
+
+.step-content-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(57, 255, 20, 0.5);
+}
+
+/* ============================================
+   14. RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .step-nav-container {
+    width: 5rem; /* Narrower on mobile */
+  }
+  
+  .step-button-active {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .step-button-inactive {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .step-number-active {
+    font-size: 1.25rem;
+  }
+  
+  .step-number-inactive {
+    font-size: 0.875rem;
+  }
+}
+
+/* ============================================
+   15. ANIMATION KEYFRAMES (Alternative to Motion)
+   ============================================ */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.step-pulse-glow-css {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 600;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.step-nav-line-path-animated {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: draw-line 1.2s ease-in-out forwards;
+}
+
+@keyframes scale-in {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.step-button-enter {
+  animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ============================================
+   16. GLASSMORPHISM UTILITIES
+   ============================================ */
+
+.glass-effect {
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-effect-strong {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   17. GLOW EFFECTS
+   ============================================ */
+
+.neon-glow-green {
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.3),
+              0 0 40px rgba(57, 255, 20, 0.2),
+              0 0 60px rgba(57, 255, 20, 0.1);
+}
+
+.neon-ring-green {
+  box-shadow: 0 0 0 4px rgba(57, 255, 20, 0.3);
+}
+
+/* ============================================
+   USAGE NOTES
+   ============================================
+   
+   1. For best results, use with Motion/Framer Motion for animations
+   2. Vertical spacing calculated in JavaScript for flexibility
+   3. Can swap #39FF14 with your brand color throughout
+   4. Glassmorphism requires backdrop-filter support
+   5. Works best on dark backgrounds (#000000 to #0A0A0A)
+   
+   CUSTOMIZATION:
+   - Brand Color: Replace all #39FF14 with your color
+   - Sizes: Adjust .step-button-active/inactive dimensions
+   - Spacing: Modify yPercent calculation (currently 5% to 95%)
+   - Glow: Adjust rgba opacity values in box-shadow
+   
+============================================ */
