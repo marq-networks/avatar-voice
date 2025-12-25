@@ -109,7 +109,14 @@ interface WizardStep {
   examples?: string[];
   field: keyof FormData;
   type: 'radio' | 'select' | 'textarea' | 'file-upload' | 'link-input' | 'switch' | 'checkbox' | 'number' | 'text';
-  options?: { value: string; label: string; description?: string }[];
+  options?: { 
+    value: string; 
+    label: string; 
+    description?: string;
+    allowInput?: boolean;
+    inputPlaceholder?: string;
+    inputField?: keyof FormData;
+  }[];
   conditional?: {
     field: keyof FormData;
     value: any;
@@ -234,23 +241,15 @@ const wizardSteps: WizardStep[] = [
     type: 'radio',
     options: [
       { value: 'us-neutral', label: 'US Neutral', description: 'Standard American' },
-      { value: 'other', label: 'Other', description: 'Custom accent' }
+      { 
+        value: 'other', 
+        label: 'Other', 
+        description: 'Custom accent',
+        allowInput: true,
+        inputField: 'customAccent',
+        inputPlaceholder: 'e.g., "British English"'
+      }
     ]
-  },
-  {
-    id: 'custom-accent',
-    title: 'Specify accent',
-    description: 'What accent?',
-    examples: [
-      'e.g., "British English"',
-      'e.g., "Australian"'
-    ],
-    field: 'customAccent',
-    type: 'text',
-    conditional: {
-      field: 'accent',
-      value: 'other'
-    }
   },
   {
     id: 'speaking-pace',
@@ -1024,6 +1023,20 @@ export default function App() {
                     <div className="font-medium text-[#0A0A0A]">{option.label}</div>
                     {option.description && (
                       <div className="text-sm text-[#4A4A4A] mt-1">{option.description}</div>
+                    )}
+                    {option.allowInput && fieldValue === option.value && option.inputField && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="mt-3"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          {...register(option.inputField as any)}
+                          placeholder={option.inputPlaceholder || "Please specify..."}
+                          className="bg-white border-[#E5E5E5] focus:border-[#39FF14] focus:ring-[#39FF14]/20"
+                        />
+                      </motion.div>
                     )}
                   </div>
                 </label>
